@@ -181,6 +181,9 @@ RUN cd /tmp/runner-toolchain && rustup toolchain install && rustc --version
 # Compile the daemon from the files Cargo reads, so a TypeScript-only change
 # reuses this layer. The Runner's own build below runs the same cargo command
 # and finds the target current.
+# Keep Rust compilation within Render Hobby's 8 GB build-memory limit.
+ENV CARGO_BUILD_JOBS=1
+
 FROM runner-artifacts-toolchain AS runner-artifacts-runnerd
 WORKDIR /workspace/packages/paperclip-runner
 COPY --from=runner-artifacts-context /packages/paperclip-runner/rust-toolchain.toml ./
